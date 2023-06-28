@@ -32,7 +32,7 @@ class Article(models.Model):
     article_title = models.CharField(max_length=200)
     article_published = models.DateTimeField('date published')
     article_image = models.ImageField(upload_to='images/')
-    article_tags = models.ManyToManyField(Tag)
+    article_tags = models.ManyToManyField(Tag)  # add this
     article_content = HTMLField()
     article_slug = models.SlugField()
 
