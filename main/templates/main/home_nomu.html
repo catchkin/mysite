@@ -1,0 +1,296 @@
+{% extends 'main/includes/header.html' %}
+
+    {% block content %}
+
+    {% load static %}
+
+
+    <div class="wrap">
+
+        
+        <!-- contents -->
+        <div class="container main">
+          <div class="inner">
+            <h1 class="hide">메인 대시 보드</h1>
+            <div class="column-wrap">
+              <div class="column-m high">
+                <div class="chatbot">
+                  <h2 class="hide">챗봇</h2>
+                  <div class="chatbot-header">
+                    <div class="left">
+                      <button type="button" class="btn-home"><i class="fas fa-home"></i><span class="hide">챗봇 내용 처음으로</span></button>
+                      <button type="button" class="btn-remove"><i class="fas fa-redo-alt"></i><span class="hide">챗봇 내역 지우기</span></button>
+                    </div>
+                    <div class="right">
+                      <button type="button" class="btn-menual"><i class="fas fa-question-circle"></i><span class="hide">사용 가이드</span></button>
+                    </div>
+                  </div>
+                  <div class="chatbot-contents">
+                    <div class="messages">
+                    </div>
+                  </div>
+                  <div class="chatbot-footer">
+                    <input type="text" class="message_input" placeholder="질문을 입력해 주세요." onkeyup="return onClickAsEnter(event)">
+                    <button type="button" class="btn-send" onclick="onSendButtonClicked()"><i class="fas fa-paper-plane"></i><span class="hide">메시지 전송</span></button>
+                  </div>
+                    <input type="hidden" id="chatbotName" value="{{ user.username|title }}">
+                    <input type="hidden" id="chatbotImage" value="${fn:replace(result.chatbotInfo.chatbotImage, '\\', '/')}">
+                    <input type="hidden" id="chatbotImageUseYn" value="${result.chatbotInfo.chatbotImageUseYn }">
+                    <input type="hidden" id="greetMessage" value="${result.greetMessage }">
+                    <input type="hidden" id="failMessage" value="${result.failMessage }">
+                  <div class="message_template">
+                            <div class="message">
+                                <span class="name"><i class="cbiCon"></i></span>
+                                <div class="bubble">
+                                    <div class="txt">
+                                    </div>
+                                    <div class="buttons">
+                                    </div>
+                                    <div class="url">
+                                    </div>
+                                    <div class="images">
+                                    </div>
+                                </div>
+                                <div class="swp_wrap">
+                                </div>
+                                <div class="out_Btn">
+                                </div>
+                                <div class="date"></div>
+                            </div>
+                        </div>
+                </div>
+              </div>
+              <div class="column-s high">
+                <div class="box completion" style="height: 224px;"><!-- 챗봇 연동 컨텐츠 연동 완료 시 class="completion" 추가됨 -->
+                  <h2 class="box-title">뉴스</h2>
+                  <div class="box-contents">
+                    <ul class="list-type-bar multiple-two">
+                       <c:forEach items="${result.mongoList}" var="result" varStatus="status">
+                            <li><a href="/newsDetail?id=${status.index}">${result.title}</a></li>
+                        </c:forEach>
+                    </ul>
+                  </div>
+                  <a href="/news" class="btn-more-txt">더보기</a>
+                </div>
+                <div class="box" style="height: 222px;">
+                  <h2 class="box-title">Products</h2>
+                  <div class="box-contents">
+                      {% for p in product %}
+                        <ul class="list-type-bar multiple-four">
+                          <li class="judicial"><a href="#"><h5 class="card-title">{{ p.product_name }}</h5></a></li>
+                        </ul>
+                      {% endfor %}
+                    <button type="button" class="btn-more" id="more-popup01">+ 더보기</button>
+                  </div>
+                </div>
+                <div class="box" style="height: 222px;"><!-- 로딩 시 class="loading" 추가됨 -->
+                  <h2 class="box-title">Blog</h2>
+                  <div class="box-contents">
+                      {% for n in new_posts %}
+                        <ul class="list-type-bar multiple-four">
+                          <li class="case"><a href="#"><h5>{{ n.article_title }}</h5></a></li>
+                        </ul>
+                      {% endfor %}
+                    <button type="button" class="btn-more" id="more-popup02">+ 더보기</button>
+                  </div>
+                  <!-- loading spinner
+                  <div class="loading-animation">
+                    <div></div>
+                  </div>
+                   -->
+                </div>
+              </div>
+              <div class="column-s high">
+
+                <div class="box" style="height: 267px;">
+                  <h2 class="hide">워드 클라우드</h2>
+                  <!--
+                  <div class="box-contents wordcloud">
+                    <img src="./resources/nomu/img/img-wordcloud.png" alt="">
+                  </div>
+                   -->
+                  <div class="box-contents wordcloud" id="wordCloud" >
+                    <!-- <img src="./resources/medi/img/img-wordcloud.png" alt=""> -->
+                  </div>
+                </div>
+                <div class="box keyword" style="height: 417px;">
+                  <h2 class="box-title">노무사전</h2>
+                  <div class="keyword-buttons">
+                    <button type="button" class="btn-square-medium blue" onclick="sendMessage('실업급여', 'right', 0,'',''); requestChat('실업급여', 'request_chat','');">실업급여</button>
+                  </div>
+                  <hr>
+                  <h2 class="box-title">추천키워드</h2>
+                  <div class="keyword-buttons">
+                    <button type="button" class="btn-square-medium blue" onclick="sendMessage('코로나19', 'right', 0,'','');requestChat('코로나19', 'request_chat','');">코로나19</button>
+                  </div>
+                  <hr>
+                  <h2 class="box-title">연관키워드</h2>
+                  <div class="keyword-buttons">
+                    <button type="button" class="btn-square-medium blue" onclick="sendMessage('고용노동부', 'right', 0,'','');requestChat('고용노동부', 'request_chat','');">고용노동부</button>
+                    <button type="button" class="btn-square-medium blue" onclick="sendMessage('산재보험', 'right', 0,'','');requestChat('산재보험', 'request_chat','');">산재보험</button>
+                  </div>
+                </div>
+              </div>
+              <div class="column-s">
+                <div class="box low">
+                  <h2 class="box-title">접속자통계</h2>
+                  <div class="box-contents stats">
+                    <dl>
+                      <dt>오늘</dt>
+                      <dd>100명</dd>
+                    </dl>
+                    <hr>
+                    <dl>
+                      <dt>누적</dt>
+                      <dd>10000명</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="box" style="height: 182px;">
+                  <h2 class="box-title">노무사 정보</h2>
+                  <div class="box-contents careerist">
+                    <div class="thumb"><img src="{% static 'img/img-people.png' %}" alt=""></div>
+                    <div class="info">
+                          <div class="name">홍길동</div>
+                          <div class="txt">노무상담</div>
+                          <div class="costs">1시간당 10만원</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box" style="height: 243px;">
+                  <h2 class="box-title">일자리 정보</h2>
+                  <div class="box-contents">
+                    <ul class="list-type-bar multiple-two">
+                      {% for n in new_posts %}
+                        <li><a href="#">{{ n.article_title }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <a href='<c:url value="/job"/>' class="btn-more-txt">더보기</a>
+                </div>
+                <div class="box" style="height: 243px;">
+                  <h2 class="box-title">교육 정보</h2>
+                  <div class="box-contents">
+                    <ul class="list-type-bar multiple-two">
+                        {% for n in new_posts %}
+                            <li><a href="#">{{ n.article_title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                  <a href='<c:url value="/education"/>' class="btn-more-txt">더보기</a>
+                </div>
+              </div>
+              <div class="column-l-wrap">
+              <div class="column-l clear-left">
+                <div class="box low">
+                  <h2 class="box-title">게시판</h2>
+                  <div class="box-contents">
+                    <ul class="list-type-bar">
+                      <c:forEach var="board" items="${result.boardList}" varStatus="status">
+                        <li><a href="/boardDetail?boardIdx=${board.boardIdx}"><c:out value="${board.boardTitle}" /></a></li>
+                      </c:forEach>
+                      <c:if test="${fn:length(result.boardList) == 0}" >
+                                <li>최신 게시물이 없습니다.</li>
+                      </c:if>
+                    </ul>
+                  </div>
+                  <a href="<c:url value='/board'/>" class="btn-more-txt">더보기</a>
+                </div>
+              </div>
+              <div class="column-l">
+                <div class="box low">
+                  <h2 class="box-title">FAQ</h2>
+                  <div class="box-contents">
+                    <ul class="list-type-bar">
+                      <c:forEach items="${result.faqList}" var="resultInfo" varStatus="status">
+                         <li><a href="<c:url value='faq'/>"><c:out value="${resultInfo.faqTitle }" /></a></li>
+                      </c:forEach>
+                      <c:if test="${fn:length(result.faqList) == 0}" >
+                                <li>최근 등록된 FAQ가 없습니다.</li>
+                      </c:if>
+                    </ul>
+                  </div>
+                  <a href="<c:url value='faq'/>" class="btn-more-txt">더보기</a>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- //contents -->
+
+
+
+    </div>
+
+
+    <script>
+
+        function updateLogoutHistory() {
+		  $.ajax({
+				url : "updateLogoutHistory",
+				type : "POST",
+				success : data => {
+					alert("로그아웃 했습니다.");
+					window.location.href = "logout";
+				},
+				error : () => {
+					alert("실패했습니다");
+				}
+			});
+		}
+
+		function accordionClick(obj){
+            $(".accordion").not(obj.closest("div.accordion")).removeClass("on");
+            obj.closest("div.accordion").toggleClass("on");
+            $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 0.0001);
+        }
+
+        $('.btn_menual').click(function(){
+            menual();
+        });
+        $('.btn-home').click(function(){
+            greet();
+        });
+        //챗봇 상단 지우개 버튼
+        $('.btn-remove').click(function () {
+            $('.messages').empty();
+        });
+
+
+	    //Pop up
+	    const $body = $("body");
+	    const popupLayer = $("div.popup-layer");
+	    $("#more-popup01").on("click", function(){
+	      $body.addClass("on");
+	      $(popupLayer).addClass("on");
+	      $("#popupTitle").empty();
+	      $("#popupTitle").html("판례");
+
+	      var text = $(".judicial").text();
+	      $(".popup-layer-contents").empty();
+	      $(".popup-layer-contents").html(text);
+	    });
+	    $(".btn-close-popup").on("click", function(){
+	      $body.removeClass("on");
+	      $(this).closest(popupLayer).removeClass("on");
+	    });
+
+	    $("#more-popup02").on("click", function(){
+		      $body.addClass("on");
+		      $(popupLayer).addClass("on");
+		      $("#popupTitle").empty();
+		      $("#popupTitle").html("사례");
+
+		      var text = $(".case").text();
+		      $(".popup-layer-contents").empty();
+		      $(".popup-layer-contents").html(text);
+		});
+
+    </script>
+
+    <style>
+
+  	</style>
+
+    {% endblock %}
