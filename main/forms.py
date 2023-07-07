@@ -34,8 +34,7 @@ class ProfileForm(forms.ModelForm):
 
 
 class VoteForm(forms.ModelForm):
-	comfort = forms.IntegerField(
-		widget=NumberInput(attrs={'placeholder': ('5'), 'type': 'range', 'min': '1', 'max': '10', 'class': 'comfort'}))
+	comfort = forms.IntegerField(widget=NumberInput(attrs={'placeholder': ('5'), 'type': 'range', 'min': '1', 'max': '10', 'class': 'comfort'}))
 	performance = forms.IntegerField(widget=NumberInput(attrs={'placeholder': ('5'), 'type': 'range', 'min': '1', 'max': '10', 'class': 'performance'}))
 	durability = forms.IntegerField(widget=NumberInput(attrs={'placeholder': ('5'), 'type': 'range', 'min': '1', 'max': '10', 'class': 'durability'}))
 

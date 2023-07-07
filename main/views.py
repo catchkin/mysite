@@ -103,7 +103,6 @@ def blog(request, tag_page):
 
 def article(request, article_page):
 	article = Article.objects.get(article_slug=article_page)
-	#article = ''
 	return render(request=request, template_name='main/article.html', context={"article": article})
 
 
