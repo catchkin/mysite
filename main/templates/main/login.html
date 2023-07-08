@@ -1,11 +1,10 @@
-{% extends "main/includes/header.html" %}
+{% extends "main/header.html" %}
 
   {% block content %}
 
   {% load crispy_forms_tags %}
 
   <!--Login-->
-<!--
   <div class="container py-5">
     <h1 class="font-weight-bold">Login</h1>
       <hr>
@@ -18,31 +17,5 @@
       </form>
       <br><br>
   </div>
--->
-
-    <!-- contents -->
-    <div class="container">
-      <div class="inner">
-        <div class="edit member login">
-          <div class="container-contents">
-            <h1 class="tit">로그인</h1>
-            <div class="contents">
-
-                <form method="POST">
-                  {% csrf_token %}
-                  {{ form|crispy }}
-                  <br>
-                  <button class="btn btn-primary" type="submit">Login</button>
-                </form>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- //contents -->
-
-
-
 
   {% endblock %}
